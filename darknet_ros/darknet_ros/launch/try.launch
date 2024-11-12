@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<launch>
+  <!-- Common parameters for darknet_ros -->
+  <arg name="launch_prefix" default=""/>
+  <arg name="yolo_weights_path" default="$(find darknet_ros)/yolo_network_config/weights"/>
+  <arg name="yolo_config_path" default="$(find darknet_ros)/yolo_network_config/cfg"/>
+  <arg name="ros_param_file" default="$(find darknet_ros)/config/ros3robot.yaml"/>
+  <arg name="network_param_file" default="$(find darknet_ros)/config/yolov3.yaml"/>
+  <arg name="image_tb3_0" default="/tb3_0/camera/rgb/image_raw" />
+  <arg name="image_tb3_1" default="/tb3_1/camera/rgb/image_raw" />
+  <arg name="image_tb3_2" default="/tb3_2/camera/rgb/image_raw" />
+
+  <!-- Load parameters -->
+  <rosparam command="load" ns="darknet_ros" file="$(arg ros_param_file)"/>
+  <rosparam command="load" ns="darknet_ros" file="$(arg network_param_file)"/>
+
+  <!-- Start darknet and ros wrapper for tb3_0 -->
+  <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros_tb3_0" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="weights_path" value="$(arg yolo_weights_path)" />
+    <param name="config_path" value="$(arg yolo_config_path)" />
+    <remap from="/tb3_0/camera/rgb/image_raw" to="/darknet_ros_tb3_0/camera/rgb/image_raw" />
+  </node>
+
+  <!-- Start darknet and ros wrapper for tb3_1 -->
+  <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros_tb3_1" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="weights_path" value="$(arg yolo_weights_path)" />
+    <param name="config_path" value="$(arg yolo_config_path)" />
+    <remap from="/tb3_1/camera/rgb/image_raw" to="/darknet_ros_tb3_1/camera/rgb/image_raw" />
+  </node>
+
+  <!-- Start darknet and ros wrapper for tb3_2 -->
+  <node pkg="darknet_ros" type="darknet_ros" name="darknet_ros_tb3_2" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="weights_path" value="$(arg yolo_weights_path)" />
+    <param name="config_path" value="$(arg yolo_config_path)" />
+    <remap from="/tb3_2/camera/rgb/image_raw" to="/darknet_ros_tb3_2/camera/rgb/image_raw" />
+  </node>
+
+</launch>
